@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MemberCacheImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;InternetCafe&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">internetcafe.cache</a> &gt; <span class="el_source">MemberCacheImpl.java</span></div><h1>MemberCacheImpl.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package internetcafe.cache;
+
+
+import internetcafe.cache.MemberListener;
+import internetcafe.database.MemberDataSourceImpl;
+import internetcafe.entity.Member;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Timer;
+
+/**
+ *
+ * @author Lorand
+ */
+public class MemberCacheImpl implements MemberCache{
+    
+    private MemberDataSourceImpl memberDataSource;
+    private List&lt;MemberListener&gt; memberListeners;
+    private List&lt;Member&gt; entries;
+    private Timer finderTimer;
+    
+<span class="nc" id="L29">    public MemberCacheImpl(MemberDataSourceImpl memberDataSource) {</span>
+<span class="nc" id="L30">        this.memberDataSource = memberDataSource;</span>
+<span class="nc" id="L31">        memberListeners = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L32">        entries = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L33">        entries.addAll(memberDataSource.getAllMembers());</span>
+        
+<span class="nc" id="L35">        setupFinderTask();</span>
+<span class="nc" id="L36">    }</span>
+    
+    private synchronized void setupFinderTask() {
+<span class="nc" id="L39">        int lastId = 0;</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if(!entries.isEmpty()) {</span>
+<span class="nc" id="L41">            final Member lastMember = entries.get(entries.size() - 1);</span>
+<span class="nc" id="L42">            lastId = lastMember.getId();</span>
+        }
+<span class="nc" id="L44">        finderTimer = new Timer();</span>
+<span class="nc" id="L45">        finderTimer.scheduleAtFixedRate(</span>
+                new MemberFinderTask(this, memberDataSource, lastId),
+                10 * 1000,
+                20 * 1000
+        );
+<span class="nc" id="L50">    }</span>
+    
+    @Override
+    public void registerMemberListener(MemberListener memberListener) {
+<span class="nc" id="L54">        memberListeners.add(memberListener);</span>
+<span class="nc" id="L55">    }</span>
+    
+    @Override
+    public List&lt;Member&gt; getAllMembers() {
+<span class="nc" id="L59">        return Collections.unmodifiableList(entries);</span>
+    }
+
+    @Override
+    public synchronized Member getMemberById(int id) {
+<span class="nc" id="L64">        Member member = null;</span>
+        try {
+<span class="nc" id="L66">            member = entries.stream().filter(m -&gt; {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                return id == m.getId();</span>
+            })
+<span class="nc" id="L69">            .findFirst()</span>
+<span class="nc" id="L70">            .get();</span>
+        }
+<span class="nc" id="L72">        catch (NoSuchElementException ex){</span>
+<span class="nc" id="L73">            member = memberDataSource.getMemberById(id);</span>
+<span class="nc" id="L74">            entries.add(member);</span>
+<span class="nc" id="L75">        }</span>
+<span class="nc" id="L76">        return member;</span>
+    }
+
+    @Override
+    public synchronized void add(List&lt;Member&gt; members) {
+<span class="nc" id="L81">        entries.addAll(members);</span>
+<span class="nc" id="L82">        members.forEach(m -&gt; {</span>
+<span class="nc" id="L83">            fireMemberInserted(m);</span>
+<span class="nc" id="L84">        });</span>
+<span class="nc" id="L85">    }</span>
+    
+    @Override
+    public synchronized void addMember(Member m) {
+<span class="nc" id="L89">        entries.add(m);</span>
+<span class="nc" id="L90">    }</span>
+    
+    private void fireMemberInserted(Member m) {
+<span class="nc" id="L93">        memberListeners.forEach(ml -&gt; {</span>
+<span class="nc" id="L94">            ml.memberInserted(m);</span>
+<span class="nc" id="L95">        });</span>
+<span class="nc" id="L96">    }</span>
+
+    @Override
+    public void save(Member m) {
+<span class="nc" id="L100">       memberDataSource.save(m);</span>
+<span class="nc" id="L101">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
