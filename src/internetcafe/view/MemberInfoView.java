@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.security.auth.login.LoginException;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -109,31 +110,51 @@ public class MemberInfoView extends JFrame{
     
     
     private void addFund() {
-        int amount = Integer.parseInt(addFundField.getText());
-        memberController.deposit(member, amount);
-        addFundField.setText("");
-        moneyAmountLabel.setText(Integer.toString(member.getBalance()));
+        boolean noError = true;
+        try {
+           int amount = Integer.parseInt(addFundField.getText());
+           if (amount < 0) throw new NumberFormatException();
+        }
+        catch(NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null,"Amount must be numeric and positive");
+            noError = false;
+        }
+        if (noError) {
+            int amount = Integer.parseInt(addFundField.getText());
+            memberController.deposit(member, amount);
+            addFundField.setText("");
+            moneyAmountLabel.setText(Integer.toString(member.getBalance()));
+        }
     }
     
     private void save() {
          boolean noError = true;
+         
          String name = nameField.getText();
          String address = addressField.getText();
          String password = passwordField.getText();
-         try {
-            Integer.parseInt(idField.getText());
-         } 
-         catch(NumberFormatException ex) {
-             JOptionPane.showMessageDialog(null,"ID must be numeric");
-             noError = false;
-             idField.setText(Integer.toString(member.getIdNumber()));
+         String id = idField.getText();
+         if (!(name.equals("") || address.equals("") || password.equals("") || id.equals(""))) {
+            try {
+                int idInt = Integer.parseInt(id);
+                if (idInt < 0) throw new NumberFormatException();
+            } 
+            catch(NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null,"ID must be numeric");
+                noError = false;
+                idField.setText(Integer.toString(member.getIdNumber()));
+            }
+            if (noError) {
+                int idNumber = Integer.parseInt(idField.getText());
+                int money = member.getBalance();
+                Member m = memberController.updateMember(member, password, name, idNumber, address, money);
+                memberController.saveMember(m);
+            }
+        }
+         else {
+             JOptionPane.showMessageDialog(null,"All field must be filled");
          }
-         if (noError) {
-            int idNumber = Integer.parseInt(idField.getText());
-            int money = member.getBalance();
-            Member m = memberController.updateMember(member, password, name, idNumber, address, money);
-            memberController.saveMember(m);
-         }
+         
          
     }
     
@@ -194,6 +215,8 @@ public class MemberInfoView extends JFrame{
                     loginAction();
                 } catch (ValidationException ex) {
                     JOptionPane.showMessageDialog(null,"Already logged in");
+                } catch (LoginException exl) {
+                    JOptionPane.showMessageDialog(null,"Invalid password");
                 }
             }
         
@@ -218,12 +241,12 @@ public class MemberInfoView extends JFrame{
     }
     
     
-    private void loginAction() throws ValidationException {
+    private void loginAction() throws ValidationException,LoginException {
         if (availableComputers.getSelectedIndex() != -1) {
             String selectedComputerString = availableComputers.getSelectedItem().toString();
             int selectedComputerIndex = Integer.parseInt(selectedComputerString);
-
-            memberController.login(member,computerController.getComputerById(selectedComputerIndex));
+            String givenPassword = passwordField.getText();
+            memberController.login(member,computerController.getComputerById(selectedComputerIndex),givenPassword);
             loginButton.setEnabled(false);
             logoutButton.setEnabled(true);
             availableComputers.setEnabled(false);

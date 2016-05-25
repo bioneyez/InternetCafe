@@ -73,20 +73,27 @@ public class AddMemberView extends JFrame{
         String password = passwordField.getText();
         String name = nameField.getText();
         String address = addressField.getText();
-        try {
-            Integer.parseInt(idField.getText());
-        } 
-        catch(NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null,"ID must be numeric");
-            noError = false;
-         }
-        if (noError) {
-            int id = Integer.parseInt(idField.getText());
-            
-            //memberController.addMember(username, password, name, id, address);
-            Member m = new Member(username,password,name,id,address);
-            memberController.saveMember(m);
-            dispose();
+        String id = idField.getText();
+        if (!(username.equals("")||password.equals("") ||name.equals("") || address.equals("") || id.equals(""))) {
+            try {
+                int idInt = Integer.parseInt(id);
+                if (idInt < 0) throw new NumberFormatException();
+            } 
+            catch(NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null,"ID must be numeric");
+                noError = false;
+             }
+            if (noError) {
+                int idNumber = Integer.parseInt(idField.getText());
+
+                //memberController.addMember(username, password, name, id, address);
+                Member m = new Member(username,password,name,idNumber,address);
+                memberController.saveMember(m);
+                dispose();
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"All field must be filled");
         }
     }
     

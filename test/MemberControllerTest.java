@@ -12,6 +12,7 @@ import internetcafe.entity.Member;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.security.auth.login.LoginException;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -83,31 +84,31 @@ public class MemberControllerTest {
         }
     }
     @Test
-    public void loginTest() throws ValidationException {
+    public void loginTest() throws ValidationException, LoginException {
         Member m = createMember(5,false);
         Computer c = createComputer(1,false); 
-        memberController.login(m,c);
+        memberController.login(m,c,"");
     }
     
     @Test(expected = ValidationException.class)
-    public void loginInvalidMemberTest() throws ValidationException {
+    public void loginInvalidMemberTest() throws ValidationException, LoginException {
         Member m = createMember(5,true);
         Computer c = createComputer(1,false); 
-        memberController.login(m,c);
+        memberController.login(m,c,"");
     }
     
     @Test(expected = ValidationException.class)
-    public void loginInvalidComputerTest() throws ValidationException {
+    public void loginInvalidComputerTest() throws ValidationException, LoginException {
         Member m = createMember(5,false);
         Computer c = createComputer(1,true); 
-        memberController.login(m,c);
+        memberController.login(m,c,"");
     }
     
     @Test(expected = ValidationException.class)
-    public void loginInvalidComputerAndMemberTest() throws ValidationException {
+    public void loginInvalidComputerAndMemberTest() throws ValidationException, LoginException {
         Member m = createMember(5,true);
         Computer c = createComputer(1,true); 
-        memberController.login(m,c);
+        memberController.login(m,c,"");
     }
     
     @Test
@@ -175,21 +176,21 @@ public class MemberControllerTest {
     }
     
     @Test
-    public void logoutTest() throws ValidationException {
+    public void logoutTest() throws ValidationException, LoginException {
         Member m = new Member();
         Computer c = new Computer();
         m.setBalance(2000);
-        memberController.login(m, c);
+        memberController.login(m, c,"");
         memberController.logout(m,c);
         assertEquals(m.isLoggedIn(),false);
     }
     
     @Test(expected = ValidationException.class)
-    public void invalidLogoutTest() throws ValidationException {
+    public void invalidLogoutTest() throws ValidationException, LoginException {
         Member m = new Member();
         Computer c = new Computer();
         m.setBalance(0);
-        memberController.login(m, c);
+        memberController.login(m, c,"");
         memberController.logout(m,c);
         assertEquals(m.isLoggedIn(),false);
     }

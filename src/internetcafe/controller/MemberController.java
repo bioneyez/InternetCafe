@@ -12,6 +12,7 @@ import internetcafe.entity.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.security.auth.login.LoginException;
 
 /**
  *
@@ -34,14 +35,17 @@ public class MemberController {
         }).collect(Collectors.toList());
      }
      
-     public void login(Member member,Computer computer) throws ValidationException {
-        if (!member.isLoggedIn() && !computer.isInUse()) {
+     public void login(Member member,Computer computer,String givenPassword) throws ValidationException, LoginException {
+        if (!member.isLoggedIn() && !computer.isInUse() && member.getPassword().equals(givenPassword)) {
             member.setLoggedIn(true);
             member.setLoginTime(LocalDateTime.now());
             computer.setInUse(true);
         }
         else {
-            throw new ValidationException();
+            if (member.getPassword().equals(givenPassword)) 
+                throw new ValidationException();
+            else 
+                throw new LoginException();
         }
     }
      

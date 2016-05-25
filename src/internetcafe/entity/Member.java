@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Member {
     private String username;
-    private String password;
+    private String password = "";
     private String name;
     private int id;
     private String address;
@@ -14,7 +14,6 @@ public class Member {
     private boolean loggedIn = false;
     private LocalDateTime loginTime;
     private int idNumber;
-    //private static int counter = 1;
 
     
     private int points = 0;
