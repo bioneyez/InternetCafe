@@ -6,130 +6,129 @@ import java.util.Objects;
 
 public class Member {
     private String username;
-    private String password;
+<span class="fc" id="L9">    private String password = &quot;&quot;;</span>
     private String name;
     private int id;
     private String address;
-<span class="pc" id="L13">    private int balance = 0;</span>
-<span class="pc" id="L14">    private boolean loggedIn = false;</span>
+<span class="fc" id="L13">    private int balance = 0;</span>
+<span class="fc" id="L14">    private boolean loggedIn = false;</span>
     private LocalDateTime loginTime;
     private int idNumber;
-    //private static int counter = 1;
 
     
-<span class="pc" id="L20">    private int points = 0;</span>
+<span class="fc" id="L19">    private int points = 0;</span>
 
-<span class="nc" id="L22">    public Member(String username, String password, String name, int idNumber, String address) {</span>
-<span class="nc" id="L23">        this.username = username;</span>
-<span class="nc" id="L24">        this.password = password;</span>
-<span class="nc" id="L25">        this.name = name;</span>
-<span class="nc" id="L26">        this.idNumber = idNumber;</span>
-<span class="nc" id="L27">        this.address = address;</span>
-<span class="nc" id="L28">        this.id = 0;</span>
+<span class="fc" id="L21">    public Member(String username, String password, String name, int idNumber, String address) {</span>
+<span class="fc" id="L22">        this.username = username;</span>
+<span class="fc" id="L23">        this.password = password;</span>
+<span class="fc" id="L24">        this.name = name;</span>
+<span class="fc" id="L25">        this.idNumber = idNumber;</span>
+<span class="fc" id="L26">        this.address = address;</span>
+<span class="fc" id="L27">        this.id = 0;</span>
         //counter++;
-<span class="nc" id="L30">    }</span>
-<span class="fc" id="L31">    public Member() {</span>
+<span class="fc" id="L29">    }</span>
+<span class="fc" id="L30">    public Member() {</span>
         
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L32">    }</span>
     public String getUsername() {
-<span class="nc" id="L35">        return username;</span>
+<span class="nc" id="L34">        return username;</span>
     }
 
     public String getPassword() {
-<span class="nc" id="L39">        return password;</span>
+<span class="fc" id="L38">        return password;</span>
     }
 
     public void setName(String name) {
-<span class="nc" id="L43">        this.name = name;</span>
-<span class="nc" id="L44">    }</span>
+<span class="fc" id="L42">        this.name = name;</span>
+<span class="fc" id="L43">    }</span>
 
     public String getName() {
-<span class="nc" id="L47">        return name;</span>
+<span class="fc" id="L46">        return name;</span>
     }
 
     public int getId() {
-<span class="nc" id="L51">        return id;</span>
+<span class="nc" id="L50">        return id;</span>
     }
 
     public String getAddress() {
-<span class="nc" id="L55">        return address;</span>
+<span class="fc" id="L54">        return address;</span>
     }
 
     public int getBalance() {
-<span class="fc" id="L59">        return balance;</span>
+<span class="fc" id="L58">        return balance;</span>
     }
 
     public boolean isLoggedIn() {
-<span class="fc" id="L63">        return loggedIn;</span>
+<span class="fc" id="L62">        return loggedIn;</span>
     }
 
     public LocalDateTime getLoginTime() {
-<span class="fc" id="L67">        return loginTime;</span>
+<span class="fc" id="L66">        return loginTime;</span>
     }
 
     public int getPoints() {
-<span class="fc" id="L71">        return points;</span>
+<span class="fc" id="L70">        return points;</span>
     }
     public void setUsername(String username) {
-<span class="nc" id="L74">        this.username = username;</span>
-<span class="nc" id="L75">    }</span>
+<span class="nc" id="L73">        this.username = username;</span>
+<span class="nc" id="L74">    }</span>
     public void setPassword(String password) {
-<span class="nc" id="L77">        this.password = password;</span>
-<span class="nc" id="L78">    }</span>
+<span class="fc" id="L76">        this.password = password;</span>
+<span class="fc" id="L77">    }</span>
 
     public void setId(int id) {
-<span class="nc" id="L81">        this.id = id;</span>
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L80">        this.id = id;</span>
+<span class="nc" id="L81">    }</span>
 
     public void setAddress(String address) {
-<span class="nc" id="L85">        this.address = address;</span>
-<span class="nc" id="L86">    }</span>
+<span class="fc" id="L84">        this.address = address;</span>
+<span class="fc" id="L85">    }</span>
 
     public void setBalance(int balance) {
-<span class="fc" id="L89">        this.balance = balance;</span>
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L88">        this.balance = balance;</span>
+<span class="fc" id="L89">    }</span>
 
     public void setLoggedIn(boolean loggedIn) {
-<span class="fc" id="L93">        this.loggedIn = loggedIn;</span>
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L92">        this.loggedIn = loggedIn;</span>
+<span class="fc" id="L93">    }</span>
 
     public void setLoginTime(LocalDateTime loginTime) {
-<span class="fc" id="L97">        this.loginTime = loginTime;</span>
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L96">        this.loginTime = loginTime;</span>
+<span class="fc" id="L97">    }</span>
 
     public void setPoints(int points) {
-<span class="fc" id="L101">        this.points = points;</span>
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L100">        this.points = points;</span>
+<span class="fc" id="L101">    }</span>
     public int getIdNumber() {
-<span class="nc" id="L104">        return idNumber;</span>
+<span class="fc" id="L103">        return idNumber;</span>
     }
 
     public void setIdNumber(int idNumber) {
-<span class="fc" id="L108">        this.idNumber = idNumber;</span>
-<span class="fc" id="L109">    }</span>
+<span class="fc" id="L107">        this.idNumber = idNumber;</span>
+<span class="fc" id="L108">    }</span>
     @Override
     public int hashCode() {
-<span class="nc" id="L112">        int hash = 7;</span>
-<span class="nc" id="L113">        hash = 89 * hash + Objects.hashCode(this.id);</span>
-<span class="nc" id="L114">        return hash;</span>
+<span class="nc" id="L111">        int hash = 7;</span>
+<span class="nc" id="L112">        hash = 89 * hash + Objects.hashCode(this.id);</span>
+<span class="nc" id="L113">        return hash;</span>
     }
 
     @Override
     public boolean equals(Object obj) {
-<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (this == obj) {</span>
-<span class="nc" id="L120">            return true;</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (this == obj) {</span>
+<span class="nc" id="L119">            return true;</span>
         }
-<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (obj == null) {</span>
-<span class="nc" id="L123">            return false;</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (obj == null) {</span>
+<span class="nc" id="L122">            return false;</span>
         }
-<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (getClass() != obj.getClass()) {</span>
-<span class="nc" id="L126">            return false;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (getClass() != obj.getClass()) {</span>
+<span class="nc" id="L125">            return false;</span>
         }
-<span class="nc" id="L128">        final Member other = (Member) obj;</span>
-<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (!Objects.equals(this.id, other.id)) {</span>
-<span class="nc" id="L130">            return false;</span>
+<span class="nc" id="L127">        final Member other = (Member) obj;</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (!Objects.equals(this.id, other.id)) {</span>
+<span class="nc" id="L129">            return false;</span>
         }
-<span class="nc" id="L132">        return true;</span>
+<span class="nc" id="L131">        return true;</span>
     }
     
 }

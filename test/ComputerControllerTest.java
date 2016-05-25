@@ -6,6 +6,7 @@ import internetcafe.controller.ComputerController;
 import internetcafe.ValidationException;
 import internetcafe.entity.Member;
 import internetcafe.entity.Computer;
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -97,6 +98,21 @@ public class ComputerControllerTest {
         
         
         computerController.rent(member, computer);
+    }
+    
+    @Test
+    public void getComputerByIdTest() {
+        List<Computer> computers = new ArrayList<>();
+        computers.add(new Computer(1,"",""));
+        computers.add(new Computer(2,"",""));
+        computers.add(new Computer(3,"",""));
+        EasyMock.expect(computerCache.getComputerById(1)).andReturn(computers.get(0));
+        EasyMock.replay(computerCache);
+        
+        Computer c = computerController.getComputerById(1);
+        assertEquals(computers.get(0).getId(),c.getId());
+        
+        
     }
     
     private Computer createComputer(int id, boolean inUse) {

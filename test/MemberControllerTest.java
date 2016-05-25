@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.security.auth.login.LoginException;
+import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -111,6 +112,12 @@ public class MemberControllerTest {
         memberController.login(m,c,"");
     }
     
+    @Test(expected = LoginException.class)
+    public void loginInvalidPasswordTest() throws ValidationException, LoginException {
+        Member m = createMember(5,true);
+        Computer c = createComputer(1,true); 
+        memberController.login(m,c,"fafafa");
+    }
     @Test
     public void calculatePointsZeroTest() {
         Member m = new Member();
@@ -123,7 +130,7 @@ public class MemberControllerTest {
     public void calculatePointsMaxTest() throws ValidationException {
         Member m = new Member();
         Computer c = new Computer();
-        m.setPoints(1500);
+        m.setPoints(1499);
         m.setLoginTime(LocalDateTime.of(2016, 4, 23, 11, 0));
         memberController.calculatePoints(m,LocalDateTime.of(2016, 4, 23, 13, 0));
         assertEquals(1500,m.getPoints());
@@ -137,6 +144,7 @@ public class MemberControllerTest {
         memberController.calculatePoints(m,LocalDateTime.of(2016, 4, 23, 16, 0));
         assertEquals(m.getPoints(),2);
     }
+    @Test
     public void calculatePointsBeforeRushHourTest2() throws ValidationException {
         Member m = new Member();
         Computer c = new Computer();
@@ -144,6 +152,15 @@ public class MemberControllerTest {
         memberController.calculatePoints(m,LocalDateTime.of(2016, 4, 23, 13, 0));
         assertEquals(m.getPoints(),4);
     }
+    @Test
+    public void calculatePointsBeforeRushHourTest3() throws ValidationException {
+        Member m = new Member();
+        Computer c = new Computer();
+        m.setLoginTime(LocalDateTime.of(2016, 4, 23, 15, 15));
+        memberController.calculatePoints(m,LocalDateTime.of(2016, 4, 23, 16, 15));
+        assertEquals(m.getPoints(),1);
+    }
+    @Test
     public void calculatePointsAfterRushHourTest1() throws ValidationException {
         Member m = new Member();
         Computer c = new Computer();
@@ -151,6 +168,7 @@ public class MemberControllerTest {
         memberController.calculatePoints(m,LocalDateTime.of(2016, 4, 23, 22, 0));
         assertEquals(m.getPoints(),2);
     }
+    @Test
     public void calculatePointsAfterRushHourTest2() throws ValidationException {
         Member m = new Member();
         Computer c = new Computer();
@@ -167,6 +185,7 @@ public class MemberControllerTest {
         memberController.calculatePoints(m,LocalDateTime.of(2016, 4, 23, 17, 0));
         assertEquals(m.getPoints(),1);
     }
+    @Test
     public void calculatePointsInRushHourTest2() throws ValidationException {
         Member m = new Member();
         Computer c = new Computer();
@@ -202,7 +221,32 @@ public class MemberControllerTest {
         assertEquals(2000, m.getBalance());
     }
     
+    @Test
+    public void addMemberTest() {
+        List<Member> members = new ArrayList<>();
+        final Capture<Member> memberCapture = new Capture<>();
+        memberCache.addMember(EasyMock.capture(memberCapture));
+        EasyMock.expectLastCall().andAnswer(() -> {
+	members.add(memberCapture.getValue());
+	return null;
+        });
+        EasyMock.replay(memberCache);
+        memberController.addMember("test", "test", "test", 0, "test");
+        assertEquals(members.size(),1);
+    }
     
+    
+    
+    @Test
+    public void updateMember() {
+        Member m = new Member();
+        memberController.updateMember(m, "Test", "Test", 0, "Test", 0);
+        assertEquals(m.getAddress(),"Test");
+        assertEquals(m.getPassword(),"Test");
+        assertEquals(m.getName(),"Test");
+        assertEquals(m.getIdNumber(),0);
+        assertEquals(m.getBalance(),0);
+    }
     
     
     private Member createMember(int id, boolean b) {
@@ -217,5 +261,12 @@ public class MemberControllerTest {
         c.setId(id);
         c.setInUse(inUse);
         return c;
+    }
+    
+    @Test
+    public void saveMember() {
+        Member m = new Member();
+        memberController.saveMember(m);
+        assertTrue(true);
     }
 }

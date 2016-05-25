@@ -156,6 +156,7 @@ public class MemberDataSourceImpl implements MemberDataSource {
         e.setPassword(rs.getString("PASSWORD"));
         e.setBalance(rs.getInt("MONEY"));
         e.setIdNumber(rs.getInt("IDNUMBER"));
+        e.setPoints(rs.getInt("POINTS"));
         //e.setDeleted(rs.getBoolean("DELETED"));
         return e;
     }
@@ -178,12 +179,12 @@ public class MemberDataSourceImpl implements MemberDataSource {
     
      
     protected String getInsertSql() {
-        return String.format("INSERT INTO %s (NAME, ADDRESS, IDNUMBER,USERNAME,PASSWORD,MONEY) VALUES(?,?,?,?,?,?)", TABLE_NAME);
+        return String.format("INSERT INTO %s (NAME, ADDRESS, IDNUMBER,USERNAME,PASSWORD,MONEY,POINTS) VALUES(?,?,?,?,?,?,?)", TABLE_NAME);
     }
 
     
     protected String getUpdateSql() {
-        return String.format("UPDATE %s SET name=?, address=?, idNumber=?, username=?, password=?, money=? WHERE ID=?", TABLE_NAME);
+        return String.format("UPDATE %s SET name=?, address=?, idNumber=?, username=?, password=?, money=?, points=? WHERE ID=?", TABLE_NAME);
     }
     
     protected void fillInsertParamsForEntity(PreparedStatement stmt, Member m) throws SQLException {
@@ -193,6 +194,7 @@ public class MemberDataSourceImpl implements MemberDataSource {
         stmt.setString(4, m.getUsername());
         stmt.setString(5, m.getPassword());
         stmt.setInt(6, m.getBalance());
+        stmt.setInt(7,m.getPoints());
     }
 
     protected void fillUpdateParamsForEntity(PreparedStatement stmt, Member m) throws SQLException {
@@ -203,6 +205,7 @@ public class MemberDataSourceImpl implements MemberDataSource {
         stmt.setString(5,m.getPassword());
         stmt.setInt(6,m.getBalance());
         stmt.setInt(7, m.getId());
+        stmt.setInt(8,m.getPoints());
     }
     
     

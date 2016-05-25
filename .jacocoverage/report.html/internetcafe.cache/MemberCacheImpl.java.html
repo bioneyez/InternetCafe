@@ -44,8 +44,8 @@ public class MemberCacheImpl implements MemberCache{
 <span class="nc" id="L44">        finderTimer = new Timer();</span>
 <span class="nc" id="L45">        finderTimer.scheduleAtFixedRate(</span>
                 new MemberFinderTask(this, memberDataSource, lastId),
-                10 * 1000,
-                20 * 1000
+                2 * 1000,
+                4 * 1000
         );
 <span class="nc" id="L50">    }</span>
     

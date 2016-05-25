@@ -12,6 +12,7 @@ import internetcafe.entity.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.security.auth.login.LoginException;
 
 /**
  *
@@ -20,121 +21,124 @@ import java.util.stream.Collectors;
 public class MemberController {
      private MemberCache memberCache;
 
-<span class="fc" id="L23">    public MemberController(MemberCache memberCache) {</span>
-<span class="fc" id="L24">        this.memberCache = memberCache;</span>
-<span class="fc" id="L25">    }</span>
+<span class="fc" id="L24">    public MemberController(MemberCache memberCache) {</span>
+<span class="fc" id="L25">        this.memberCache = memberCache;</span>
+<span class="fc" id="L26">    }</span>
      
      public List&lt;Member&gt; getAllMembers() {
-<span class="fc" id="L28">         return memberCache.getAllMembers();</span>
+<span class="fc" id="L29">         return memberCache.getAllMembers();</span>
      }
      
      public List&lt;Member&gt; getAllUnloggedMembers() {
-<span class="fc" id="L32">         return getAllMembers().stream().filter(m -&gt; {</span>
-<span class="fc bfc" id="L33" title="All 2 branches covered.">            return !m.isLoggedIn();</span>
-<span class="fc" id="L34">        }).collect(Collectors.toList());</span>
+<span class="fc" id="L33">         return getAllMembers().stream().filter(m -&gt; {</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            return !m.isLoggedIn();</span>
+<span class="fc" id="L35">        }).collect(Collectors.toList());</span>
      }
      
-     public void login(Member member,Computer computer) throws ValidationException {
-<span class="fc bfc" id="L38" title="All 4 branches covered.">        if (!member.isLoggedIn() &amp;&amp; !computer.isInUse()) {</span>
-<span class="fc" id="L39">            member.setLoggedIn(true);</span>
-<span class="fc" id="L40">            member.setLoginTime(LocalDateTime.now());</span>
-<span class="fc" id="L41">            computer.setInUse(true);</span>
+     public void login(Member member,Computer computer,String givenPassword) throws ValidationException, LoginException {
+<span class="pc bpc" id="L39" title="1 of 6 branches missed.">        if (!member.isLoggedIn() &amp;&amp; !computer.isInUse() &amp;&amp; member.getPassword().equals(givenPassword)) {</span>
+<span class="fc" id="L40">            member.setLoggedIn(true);</span>
+<span class="fc" id="L41">            member.setLoginTime(LocalDateTime.now());</span>
+<span class="fc" id="L42">            computer.setInUse(true);</span>
         }
         else {
-<span class="fc" id="L44">            throw new ValidationException();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            if (member.getPassword().equals(givenPassword)) </span>
+<span class="fc" id="L46">                throw new ValidationException();</span>
+            else 
+<span class="fc" id="L48">                throw new LoginException();</span>
         }
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L50">    }</span>
      
      public void calculatePoints(Member member, LocalDateTime logoutTime) {
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (member.getPoints() &lt; 1500) {</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (member.getPoints() &lt; 1500) {</span>
             
-<span class="fc" id="L51">            int loginHour = member.getLoginTime().getHour();</span>
-<span class="fc" id="L52">            int loginMinute = member.getLoginTime().getMinute();</span>
+<span class="fc" id="L55">            int loginHour = member.getLoginTime().getHour();</span>
+<span class="fc" id="L56">            int loginMinute = member.getLoginTime().getMinute();</span>
             
-<span class="fc" id="L54">            int logoutHour = logoutTime.getHour();</span>
-<span class="fc" id="L55">            int logoutMinute = logoutTime.getMinute();</span>
-<span class="fc" id="L56">            int actualPoints = member.getPoints();</span>
+<span class="fc" id="L58">            int logoutHour = logoutTime.getHour();</span>
+<span class="fc" id="L59">            int logoutMinute = logoutTime.getMinute();</span>
+<span class="fc" id="L60">            int actualPoints = member.getPoints();</span>
 
-<span class="fc bfc" id="L58" title="All 2 branches covered.">              while(loginHour != logoutHour) {</span>
-<span class="pc bpc" id="L59" title="2 of 6 branches missed.">                 while ((loginHour == 15 &amp;&amp; loginMinute == 0) &amp;&amp; loginHour != logoutHour) {</span>
-<span class="fc" id="L60">                    actualPoints+= 2;</span>
-<span class="fc" id="L61">                    loginHour++;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">              while(loginHour != logoutHour) {</span>
+<span class="pc bpc" id="L63" title="1 of 6 branches missed.">                 while ((loginHour == 15 &amp;&amp; loginMinute == 0) &amp;&amp; loginHour != logoutHour) {</span>
+<span class="fc" id="L64">                    actualPoints+= 2;</span>
+<span class="fc" id="L65">                    loginHour++;</span>
                     }  
-<span class="pc bpc" id="L63" title="5 of 6 branches missed.">                 while ((loginHour == 15 &amp;&amp; loginMinute != 0) &amp;&amp; loginHour != logoutHour) {</span>
-<span class="nc" id="L64">                    actualPoints+= 1;</span>
-<span class="nc" id="L65">                    loginHour++;</span>
+<span class="pc bpc" id="L67" title="2 of 6 branches missed.">                 while ((loginHour == 15 &amp;&amp; loginMinute != 0) &amp;&amp; loginHour != logoutHour) {</span>
+<span class="fc" id="L68">                    actualPoints+= 1;</span>
+<span class="fc" id="L69">                    loginHour++;</span>
                     }
                  
-<span class="pc bpc" id="L68" title="3 of 4 branches missed.">                 while ((loginHour &lt; 15) &amp;&amp; loginHour != logoutHour) {</span>
-<span class="nc" id="L69">                    actualPoints+= 2;</span>
-<span class="nc" id="L70">                    loginHour++;</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">                 while ((loginHour &lt; 15) &amp;&amp; loginHour != logoutHour) {</span>
+<span class="fc" id="L73">                    actualPoints+= 2;</span>
+<span class="fc" id="L74">                    loginHour++;</span>
                     }
 
                
 
-<span class="pc bpc" id="L75" title="1 of 4 branches missed.">                  while (loginHour &lt; 21 &amp;&amp; loginHour != logoutHour) {</span>
-<span class="fc" id="L76">                     actualPoints+=1;</span>
-<span class="fc" id="L77">                     loginHour++;</span>
+<span class="fc bfc" id="L79" title="All 4 branches covered.">                  while (loginHour &lt; 21 &amp;&amp; loginHour != logoutHour) {</span>
+<span class="fc" id="L80">                     actualPoints+=1;</span>
+<span class="fc" id="L81">                     loginHour++;</span>
                     }
-<span class="pc bpc" id="L79" title="3 of 4 branches missed.">                  while (loginHour &gt;= 21 &amp;&amp; loginHour != logoutHour) {</span>
-<span class="nc" id="L80">                      actualPoints+=2;</span>
-<span class="nc" id="L81">                      loginHour++;</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">                      if (loginHour &gt; 23) {</span>
-<span class="nc" id="L83">                          loginHour = 0;</span>
+<span class="fc bfc" id="L83" title="All 4 branches covered.">                  while (loginHour &gt;= 21 &amp;&amp; loginHour != logoutHour) {</span>
+<span class="fc" id="L84">                      actualPoints+=2;</span>
+<span class="fc" id="L85">                      loginHour++;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                      if (loginHour &gt; 23) {</span>
+<span class="fc" id="L87">                          loginHour = 0;</span>
                     }
                   }
                }
               
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            if ( actualPoints&gt;1500) {</span>
-<span class="nc" id="L89">                 actualPoints = 1500;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">            if ( actualPoints&gt;1500) {</span>
+<span class="fc" id="L93">                 actualPoints = 1500;</span>
             }
-<span class="fc" id="L91">            member.setPoints(actualPoints);</span>
+<span class="fc" id="L95">            member.setPoints(actualPoints);</span>
         }
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L97">    }</span>
      
     private int calculateBill(Member member) {
-<span class="fc" id="L96">        int discountInPercent = (member.getPoints() / 150)/100;</span>
-<span class="fc" id="L97">        int ratePerHour = 1000;</span>
-<span class="fc" id="L98">        int bill = ratePerHour * discountInPercent;</span>
-<span class="fc" id="L99">        return bill;</span>
+<span class="fc" id="L100">        int discountInPercent = (member.getPoints() / 150)/100;</span>
+<span class="fc" id="L101">        int ratePerHour = 1000;</span>
+<span class="fc" id="L102">        int bill = ratePerHour * discountInPercent;</span>
+<span class="fc" id="L103">        return bill;</span>
     }
     
     
      public void logout(Member member,Computer computer) throws ValidationException {
-<span class="fc" id="L104">        calculatePoints(member,LocalDateTime.now());</span>
-<span class="fc" id="L105">        int bill = calculateBill(member);</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">        if ((member.getBalance() - bill) &gt; 0) {</span>
-<span class="fc" id="L107">            member.setLoggedIn(false);</span>
-<span class="fc" id="L108">            computer.setInUse(false);</span>
-<span class="fc" id="L109">            member.setBalance(member.getBalance()-bill);</span>
+<span class="fc" id="L108">        calculatePoints(member,LocalDateTime.now());</span>
+<span class="fc" id="L109">        int bill = calculateBill(member);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if ((member.getBalance() - bill) &gt; 0) {</span>
+<span class="fc" id="L111">            member.setLoggedIn(false);</span>
+<span class="fc" id="L112">            computer.setInUse(false);</span>
+<span class="fc" id="L113">            member.setBalance(member.getBalance()-bill);</span>
             
         }
         else {
-<span class="fc" id="L113">            throw new ValidationException();</span>
+<span class="fc" id="L117">            throw new ValidationException();</span>
         }
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L119">    }</span>
      
     public void deposit(Member member,int amount) {
-<span class="fc" id="L118">        member.setBalance(member.getBalance()+amount);</span>
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L122">        member.setBalance(member.getBalance()+amount);</span>
+<span class="fc" id="L123">    }</span>
     
     public void addMember(String username, String password, String name, int id, String address) {
-<span class="nc" id="L122">        Member newMember = new Member(username,password,name,id,address);</span>
-<span class="nc" id="L123">        memberCache.addMember(newMember);</span>
+<span class="fc" id="L126">        Member newMember = new Member(username,password,name,id,address);</span>
+<span class="fc" id="L127">        memberCache.addMember(newMember);</span>
         
-<span class="nc" id="L125">    }</span>
+<span class="fc" id="L129">    }</span>
     
     public void saveMember(Member m) {
-<span class="nc" id="L128">        memberCache.save(m);</span>
-<span class="nc" id="L129">    }</span>
+<span class="fc" id="L132">        memberCache.save(m);</span>
+<span class="fc" id="L133">    }</span>
     
     public Member updateMember(Member m, String password,String name, int idNumber,String address,int money) {
-<span class="nc" id="L132">        m.setAddress(address);</span>
-<span class="nc" id="L133">        m.setName(name);</span>
-<span class="nc" id="L134">        m.setPassword(password);</span>
-<span class="nc" id="L135">        m.setIdNumber(idNumber);</span>
-<span class="nc" id="L136">        m.setBalance(money);</span>
-<span class="nc" id="L137">        return m;</span>
+<span class="fc" id="L136">        m.setAddress(address);</span>
+<span class="fc" id="L137">        m.setName(name);</span>
+<span class="fc" id="L138">        m.setPassword(password);</span>
+<span class="fc" id="L139">        m.setIdNumber(idNumber);</span>
+<span class="fc" id="L140">        m.setBalance(money);</span>
+<span class="fc" id="L141">        return m;</span>
     }
     
 }

@@ -73,62 +73,69 @@ public class AddMemberView extends JFrame{
 <span class="nc" id="L73">        String password = passwordField.getText();</span>
 <span class="nc" id="L74">        String name = nameField.getText();</span>
 <span class="nc" id="L75">        String address = addressField.getText();</span>
-        try {
-<span class="nc" id="L77">            Integer.parseInt(idField.getText());</span>
-        } 
-<span class="nc" id="L79">        catch(NumberFormatException ex) {</span>
-<span class="nc" id="L80">            JOptionPane.showMessageDialog(null,&quot;ID must be numeric&quot;);</span>
-<span class="nc" id="L81">            noError = false;</span>
-<span class="nc" id="L82">         }</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (noError) {</span>
-<span class="nc" id="L84">            int id = Integer.parseInt(idField.getText());</span>
-            
-            //memberController.addMember(username, password, name, id, address);
-<span class="nc" id="L87">            Member m = new Member(username,password,name,id,address);</span>
-<span class="nc" id="L88">            memberController.saveMember(m);</span>
-<span class="nc" id="L89">            dispose();</span>
+<span class="nc" id="L76">        String id = idField.getText();</span>
+<span class="nc bnc" id="L77" title="All 10 branches missed.">        if (!(username.equals(&quot;&quot;)||password.equals(&quot;&quot;) ||name.equals(&quot;&quot;) || address.equals(&quot;&quot;) || id.equals(&quot;&quot;))) {</span>
+            try {
+<span class="nc" id="L79">                int idInt = Integer.parseInt(id);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                if (idInt &lt; 0) throw new NumberFormatException();</span>
+            } 
+<span class="nc" id="L82">            catch(NumberFormatException ex) {</span>
+<span class="nc" id="L83">                JOptionPane.showMessageDialog(null,&quot;ID must be numeric&quot;);</span>
+<span class="nc" id="L84">                noError = false;</span>
+<span class="nc" id="L85">             }</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            if (noError) {</span>
+<span class="nc" id="L87">                int idNumber = Integer.parseInt(idField.getText());</span>
+
+                //memberController.addMember(username, password, name, id, address);
+<span class="nc" id="L90">                Member m = new Member(username,password,name,idNumber,address);</span>
+<span class="nc" id="L91">                memberController.saveMember(m);</span>
+<span class="nc" id="L92">                dispose();</span>
+<span class="nc" id="L93">            }</span>
         }
-<span class="nc" id="L91">    }</span>
+        else {
+<span class="nc" id="L96">            JOptionPane.showMessageDialog(null,&quot;All field must be filled&quot;);</span>
+        }
+<span class="nc" id="L98">    }</span>
     
     private void setLayout() {
-<span class="nc" id="L94">        GroupLayout layout = new GroupLayout(panel);</span>
-<span class="nc" id="L95">        panel.setLayout(layout);</span>
-<span class="nc" id="L96">        layout.setAutoCreateGaps(true);</span>
+<span class="nc" id="L101">        GroupLayout layout = new GroupLayout(panel);</span>
+<span class="nc" id="L102">        panel.setLayout(layout);</span>
+<span class="nc" id="L103">        layout.setAutoCreateGaps(true);</span>
         
-<span class="nc" id="L98">        GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();</span>
-<span class="nc" id="L99">        hGroup.addGroup(layout.createParallelGroup().</span>
-<span class="nc" id="L100">            addComponent(nameLabel).addComponent(addressLabel).addComponent(idLabel).addComponent(usernameLabel).addComponent(passwordLabel).addComponent(saveButton));</span>
+<span class="nc" id="L105">        GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();</span>
+<span class="nc" id="L106">        hGroup.addGroup(layout.createParallelGroup().</span>
+<span class="nc" id="L107">            addComponent(nameLabel).addComponent(addressLabel).addComponent(idLabel).addComponent(usernameLabel).addComponent(passwordLabel).addComponent(saveButton));</span>
         
-<span class="nc" id="L102">        hGroup.addGroup(layout.createParallelGroup().</span>
-<span class="nc" id="L103">            addComponent(nameField).addComponent(addressField).addComponent(idField).addComponent(usernameField).addComponent(passwordField));</span>
+<span class="nc" id="L109">        hGroup.addGroup(layout.createParallelGroup().</span>
+<span class="nc" id="L110">            addComponent(nameField).addComponent(addressField).addComponent(idField).addComponent(usernameField).addComponent(passwordField));</span>
         
-<span class="nc" id="L105">        layout.setHorizontalGroup(hGroup);</span>
+<span class="nc" id="L112">        layout.setHorizontalGroup(hGroup);</span>
         
-<span class="nc" id="L107">        GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();</span>
-<span class="nc" id="L108">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
-<span class="nc" id="L109">            addComponent(nameLabel).addComponent(nameField));</span>
-<span class="nc" id="L110">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
-<span class="nc" id="L111">            addComponent(addressLabel).addComponent(addressField));</span>
-<span class="nc" id="L112">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
-<span class="nc" id="L113">            addComponent(idLabel).addComponent(idField));</span>
-<span class="nc" id="L114">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
-<span class="nc" id="L115">            addComponent(usernameLabel).addComponent(usernameField));</span>
-<span class="nc" id="L116">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
-<span class="nc" id="L117">            addComponent(passwordLabel).addComponent(passwordField));</span>
-<span class="nc" id="L118">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
-<span class="nc" id="L119">            addComponent(saveButton));</span>
+<span class="nc" id="L114">        GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();</span>
+<span class="nc" id="L115">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
+<span class="nc" id="L116">            addComponent(nameLabel).addComponent(nameField));</span>
+<span class="nc" id="L117">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
+<span class="nc" id="L118">            addComponent(addressLabel).addComponent(addressField));</span>
+<span class="nc" id="L119">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
+<span class="nc" id="L120">            addComponent(idLabel).addComponent(idField));</span>
+<span class="nc" id="L121">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
+<span class="nc" id="L122">            addComponent(usernameLabel).addComponent(usernameField));</span>
+<span class="nc" id="L123">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
+<span class="nc" id="L124">            addComponent(passwordLabel).addComponent(passwordField));</span>
+<span class="nc" id="L125">        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).</span>
+<span class="nc" id="L126">            addComponent(saveButton));</span>
         
-<span class="nc" id="L121">        layout.setVerticalGroup(vGroup);</span>
-<span class="nc" id="L122">    }</span>
+<span class="nc" id="L128">        layout.setVerticalGroup(vGroup);</span>
+<span class="nc" id="L129">    }</span>
 
     private void setActionListeners() {
-<span class="nc" id="L125">        saveButton.addActionListener(new ActionListener(){</span>
+<span class="nc" id="L132">        saveButton.addActionListener(new ActionListener(){</span>
             @Override
             public void actionPerformed(ActionEvent e) {
-<span class="nc" id="L128">                save();</span>
-<span class="nc" id="L129">            }</span>
+<span class="nc" id="L135">                save();</span>
+<span class="nc" id="L136">            }</span>
         
         });
-<span class="nc" id="L132">    }</span>
+<span class="nc" id="L139">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

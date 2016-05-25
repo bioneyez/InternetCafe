@@ -46,7 +46,7 @@ public class MemberInfoView extends JFrame{
     private JLabel usernameLabel;
     private JLabel passwordLabel;
     private JLabel moneyLabel;
-    private JLabel idInDB;
+    private JLabel pointsLabel;
     private JTextField nameField;
     private JTextField idField;
     private JTextField addressField;
@@ -94,7 +94,7 @@ public class MemberInfoView extends JFrame{
         computerLabel = new JLabel("Computer: ");
         moneyLabel = new JLabel("Money: ");
         moneyAmountLabel = new JLabel(Integer.toString(member.getBalance()));
-        idInDB = new JLabel("ID" + member.getId());
+        pointsLabel = new JLabel("Points: " + member.getPoints());
         
         nameField = new JTextField(member.getName());
         idField = new JTextField(Integer.toString(member.getIdNumber()));
@@ -170,7 +170,7 @@ public class MemberInfoView extends JFrame{
             addComponent(nameField).addComponent(addressField).addComponent(idField).addComponent(usernameField).addComponent(passwordField).addComponent(moneyAmountLabel).addComponent(availableComputers).addComponent(logoutButton));
         
         hGroup.addGroup(layout.createParallelGroup().addComponent(addFundField).addComponent(addFundButton));
-        hGroup.addGroup(layout.createParallelGroup().addComponent(saveButton).addComponent(idInDB));
+        hGroup.addGroup(layout.createParallelGroup().addComponent(saveButton).addComponent(pointsLabel));
         
         
         layout.setHorizontalGroup(hGroup);
@@ -189,7 +189,7 @@ public class MemberInfoView extends JFrame{
         vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE).
             addComponent(moneyLabel).addComponent(moneyAmountLabel));
         vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE).
-            addComponent(computerLabel).addComponent(availableComputers).addComponent(addFundField).addComponent(idInDB));
+            addComponent(computerLabel).addComponent(availableComputers).addComponent(addFundField).addComponent(pointsLabel));
         vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE).
             addComponent(loginButton).addComponent(logoutButton).addComponent(addFundButton).addComponent(saveButton));
         layout.setVerticalGroup(vGroup);

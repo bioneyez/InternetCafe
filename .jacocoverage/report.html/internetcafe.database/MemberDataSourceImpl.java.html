@@ -156,85 +156,88 @@ public class MemberDataSourceImpl implements MemberDataSource {
 <span class="nc" id="L156">        e.setPassword(rs.getString(&quot;PASSWORD&quot;));</span>
 <span class="nc" id="L157">        e.setBalance(rs.getInt(&quot;MONEY&quot;));</span>
 <span class="nc" id="L158">        e.setIdNumber(rs.getInt(&quot;IDNUMBER&quot;));</span>
+<span class="nc" id="L159">        e.setPoints(rs.getInt(&quot;POINTS&quot;));</span>
         //e.setDeleted(rs.getBoolean(&quot;DELETED&quot;));
-<span class="nc" id="L160">        return e;</span>
+<span class="nc" id="L161">        return e;</span>
     }
     
     
     
     
     protected String findAllByIdSql() {
-<span class="nc" id="L167">        return findAllSql() + &quot; where id = ?&quot;;// + NOT_DELETED_WHERE;</span>
+<span class="nc" id="L168">        return findAllSql() + &quot; where id = ?&quot;;// + NOT_DELETED_WHERE;</span>
     }
     
     protected String findAllSql() {
-<span class="nc" id="L171">        return String.format(&quot;select * from %s&quot;, getTableName());</span>
+<span class="nc" id="L172">        return String.format(&quot;select * from %s&quot;, getTableName());</span>
     }
     
     protected String findAllSinceSql() {
-<span class="nc" id="L175">        return findAllSql() + &quot; where id &gt; ?&quot;; // + NOT_DELETED_WHERE;</span>
+<span class="nc" id="L176">        return findAllSql() + &quot; where id &gt; ?&quot;; // + NOT_DELETED_WHERE;</span>
     }
     
     
      
     protected String getInsertSql() {
-<span class="nc" id="L181">        return String.format(&quot;INSERT INTO %s (NAME, ADDRESS, IDNUMBER,USERNAME,PASSWORD,MONEY) VALUES(?,?,?,?,?,?)&quot;, TABLE_NAME);</span>
+<span class="nc" id="L182">        return String.format(&quot;INSERT INTO %s (NAME, ADDRESS, IDNUMBER,USERNAME,PASSWORD,MONEY,POINTS) VALUES(?,?,?,?,?,?,?)&quot;, TABLE_NAME);</span>
     }
 
     
     protected String getUpdateSql() {
-<span class="nc" id="L186">        return String.format(&quot;UPDATE %s SET name=?, address=?, idNumber=?, username=?, password=?, money=? WHERE ID=?&quot;, TABLE_NAME);</span>
+<span class="nc" id="L187">        return String.format(&quot;UPDATE %s SET name=?, address=?, idNumber=?, username=?, password=?, money=?, points=? WHERE ID=?&quot;, TABLE_NAME);</span>
     }
     
     protected void fillInsertParamsForEntity(PreparedStatement stmt, Member m) throws SQLException {
-<span class="nc" id="L190">        stmt.setString(1, m.getName());</span>
-<span class="nc" id="L191">        stmt.setString(2, m.getAddress());</span>
-<span class="nc" id="L192">        stmt.setInt(3, m.getIdNumber());</span>
-<span class="nc" id="L193">        stmt.setString(4, m.getUsername());</span>
-<span class="nc" id="L194">        stmt.setString(5, m.getPassword());</span>
-<span class="nc" id="L195">        stmt.setInt(6, m.getBalance());</span>
-<span class="nc" id="L196">    }</span>
+<span class="nc" id="L191">        stmt.setString(1, m.getName());</span>
+<span class="nc" id="L192">        stmt.setString(2, m.getAddress());</span>
+<span class="nc" id="L193">        stmt.setInt(3, m.getIdNumber());</span>
+<span class="nc" id="L194">        stmt.setString(4, m.getUsername());</span>
+<span class="nc" id="L195">        stmt.setString(5, m.getPassword());</span>
+<span class="nc" id="L196">        stmt.setInt(6, m.getBalance());</span>
+<span class="nc" id="L197">        stmt.setInt(7,m.getPoints());</span>
+<span class="nc" id="L198">    }</span>
 
     protected void fillUpdateParamsForEntity(PreparedStatement stmt, Member m) throws SQLException {
-<span class="nc" id="L199">        stmt.setString(1, m.getName());</span>
-<span class="nc" id="L200">        stmt.setString(2, m.getAddress());</span>
-<span class="nc" id="L201">        stmt.setInt(3, m.getIdNumber());</span>
-<span class="nc" id="L202">        stmt.setString(4, m.getUsername());</span>
-<span class="nc" id="L203">        stmt.setString(5,m.getPassword());</span>
-<span class="nc" id="L204">        stmt.setInt(6,m.getBalance());</span>
-<span class="nc" id="L205">        stmt.setInt(7, m.getId());</span>
-<span class="nc" id="L206">    }</span>
+<span class="nc" id="L201">        stmt.setString(1, m.getName());</span>
+<span class="nc" id="L202">        stmt.setString(2, m.getAddress());</span>
+<span class="nc" id="L203">        stmt.setInt(3, m.getIdNumber());</span>
+<span class="nc" id="L204">        stmt.setString(4, m.getUsername());</span>
+<span class="nc" id="L205">        stmt.setString(5,m.getPassword());</span>
+<span class="nc" id="L206">        stmt.setInt(6,m.getBalance());</span>
+<span class="nc" id="L207">        stmt.setInt(7, m.getId());</span>
+<span class="nc" id="L208">        stmt.setInt(8,m.getPoints());</span>
+<span class="nc" id="L209">    }</span>
     
     
     protected String getTableName() {
-<span class="nc" id="L210">        return TABLE_NAME;</span>
+<span class="nc" id="L213">        return TABLE_NAME;</span>
     }
     
     public void save(Member m) {
-<span class="nc" id="L214">        doSave(m);</span>
-<span class="nc" id="L215">    }</span>
+<span class="nc" id="L217">        doSave(m);</span>
+<span class="nc" id="L218">    }</span>
 
     private void doSave(Member m) {
         try {
-<span class="nc bnc" id="L219" title="All 2 branches missed.">            if (m.getId() == 0) {</span>
-<span class="nc" id="L220">                insert(m);</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">            if (m.getId() == 0) {</span>
+<span class="nc" id="L223">                insert(m);</span>
             } else {
-<span class="nc" id="L222">                update(m);</span>
+<span class="nc" id="L225">                update(m);</span>
             }
-<span class="nc" id="L224">        } catch (SQLException ex) {</span>
-<span class="nc" id="L225">            throw new RuntimeException(ex);</span>
-<span class="nc" id="L226">        }</span>
-<span class="nc" id="L227">    }</span>
+<span class="nc" id="L227">        } catch (SQLException ex) {</span>
+<span class="nc" id="L228">            throw new RuntimeException(ex);</span>
+<span class="nc" id="L229">        }</span>
+<span class="nc" id="L230">    }</span>
     
     protected void fillId(PreparedStatement stmt, Member m) throws SQLException {
-<span class="nc" id="L230">        try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {</span>
-<span class="nc bnc" id="L231" title="All 2 branches missed.">            if (generatedKeys.next()) {</span>
-<span class="nc" id="L232">                m.setId(generatedKeys.getInt(1));</span>
+<span class="nc" id="L233">        try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">            if (generatedKeys.next()) {</span>
+<span class="nc" id="L235">                m.setId(generatedKeys.getInt(1));</span>
             } else {
-<span class="nc" id="L234">                throw new SQLException(&quot;Creating entity failed, no ID obtained.&quot;);</span>
+<span class="nc" id="L237">                throw new SQLException(&quot;Creating entity failed, no ID obtained.&quot;);</span>
             }
-<span class="nc bnc" id="L236" title="All 8 branches missed.">        }</span>
-<span class="nc" id="L237">    }</span>
+<span class="nc bnc" id="L239" title="All 8 branches missed.">        }</span>
+<span class="nc" id="L240">    }</span>
     
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
